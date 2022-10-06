@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import Home from "./pages/Home";
+import Game from "./pages/Game";
 
 const Border = styled.div`
   width: 100%;
@@ -31,6 +32,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/:difficulty" element={<Game />} />
             </Routes>
           </Router>
         </Wrapper>
