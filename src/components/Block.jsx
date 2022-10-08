@@ -23,8 +23,7 @@ function Block({ value, revealed, flagged, r, c, updateFlag, revealBlock }) {
         revealBlock(r, c);
       }}
     >
-      {/* {revealed ? value : ""} */}
-      {value !== 0 && value}
+      {revealed ? value : ""}
     </Border>
   );
 }

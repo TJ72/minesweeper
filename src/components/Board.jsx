@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import createBoard from "../utils/createBoard";
+import reveal from "../utils/reveal";
 import Block from "./Block";
 
 const Row = styled.div`
@@ -29,8 +30,8 @@ function Board() {
     if (newGrid[r][c].value === "X") {
       alert("Game Over");
     } else {
-      newGrid[r][c].revealed = true;
-      setGrid(newGrid);
+      const newRevealedBoard = reveal(newGrid, r, c);
+      setGrid(newRevealedBoard.grid);
     }
   }
 
