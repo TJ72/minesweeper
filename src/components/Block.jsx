@@ -1,13 +1,23 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import {
+  mineColor,
+  unrevealedBlock,
+  revealedBlock,
+} from "../utils/blockBackground";
+import reveal from "../utils/reveal";
 
 const Border = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid black;
-  background: #f7f7f7;
   cursor: pointer;
+  background: ${(props) =>
+    props.revealed
+      ? props.value === "X"
+        ? mineColor()
+        : revealedBlock(props.indexSum)
+      : unrevealedBlock(props.indexSum)};
   ${(props) => {
     switch (props.rows) {
       case 8:
@@ -15,17 +25,19 @@ const Border = styled.div`
           width: 40px;
           height: 40px;
           font-size: 1.5rem;
+          font-weight: 600;
         `;
       default:
         return css`
           width: 30px;
           height: 30px;
           font-size: 1.4rem;
+          font-weight: 570;
         `;
     }
   }}
   &:hover {
-    opacity: 0.5;
+    opacity: 0.7;
   }
 `;
 
@@ -39,10 +51,12 @@ function Block({
   updateFlag,
   revealBlock,
 }) {
-  console.log("rows", rows);
   return (
     <Border
       rows={rows}
+      indexSum={r + c}
+      revealed={revealed}
+      value={value}
       onContextMenu={(e) => updateFlag(e, r, c)}
       onClick={() => {
         revealBlock(r, c);
