@@ -2,10 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Block from "../components/Block";
-
-const Row = styled.div`
-  display: flex;
-`;
+import Board from "../components/Board";
 
 function Game() {
   const { difficulty } = useParams();
@@ -23,15 +20,16 @@ function Game() {
       [rows, cols, bombs] = [16, 30, 99];
       break;
   }
-  return Array.from({ length: rows }, (_, i) => i).map((row) => {
-    return (
-      <Row>
-        {Array.from({ length: cols }, (_, i) => i).map((col) => (
-          <Block />
-        ))}
-      </Row>
-    );
-  });
+  // return Array.from({ length: rows }, (_, i) => i).map((row) => {
+  //   return (
+  //     <Row>
+  //       {Array.from({ length: cols }, (_, i) => i).map((col) => (
+  //         <Block />
+  //       ))}
+  //     </Row>
+  //   );
+  // });
+  return <Board />;
 }
 
 export default Game;

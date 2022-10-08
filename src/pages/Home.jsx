@@ -52,7 +52,7 @@ const HardBtn = styled(Button)`
 function Home() {
   return (
     <>
-      <Title>Welcome to Minesweeper!</Title>
+      <Title>Welcome to Minesweeper!💣</Title>
       <ButtonsContainer>
         <Link to="/easy">
           <EasyBtn>Easy</EasyBtn>
