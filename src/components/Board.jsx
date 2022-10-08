@@ -4,16 +4,26 @@ import createBoard from "../utils/createBoard";
 import reveal from "../utils/reveal";
 import Block from "./Block";
 
+const LoadReminder = styled.div`
+  font-size: 2rem;
+  font-weight: 660;
+`;
+
 const Row = styled.div`
   display: flex;
 `;
 
-function Board() {
+function Board({ rows, cols, bombs }) {
   const [grid, setGrid] = useState([]);
+  const [nonMineCount, setNonMineCount] = useState(0);
+  const [mineLocations, setMineLocations] = useState([]);
+
   useEffect(() => {
     function freshBoard() {
-      const newBoard = createBoard(10, 10, 20);
+      const newBoard = createBoard(rows, cols, bombs);
       setGrid(newBoard.board);
+      setNonMineCount(rows * cols - bombs);
+      setMineLocations(newBoard.mineLocations);
     }
     freshBoard();
   }, []);
@@ -26,16 +36,22 @@ function Board() {
   }
 
   function revealBlock(r, c) {
+    if (grid[r][c].revealed) return;
     const newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[r][c].value === "X") {
       alert("Game Over");
+      for (let i = 0; i < mineLocations.length; i++) {
+        newGrid[mineLocations[i][0]][mineLocations[i][1]].revealed = true;
+      }
+      setGrid(newGrid);
     } else {
-      const newRevealedBoard = reveal(newGrid, r, c);
+      const newRevealedBoard = reveal(newGrid, r, c, nonMineCount);
       setGrid(newRevealedBoard.grid);
+      setNonMineCount(newRevealedBoard.newNonMineCount);
     }
   }
 
-  if (grid.length === 0) return <div>Loading...</div>;
+  if (grid.length === 0) return <LoadReminder>Loading...</LoadReminder>;
   return grid.map((row, idx1) => {
     return (
       <Row key={idx1}>
@@ -47,6 +63,7 @@ function Board() {
             flagged={block.flagged}
             r={block.r}
             c={block.c}
+            rows={rows}
             updateFlag={updateFlag}
             revealBlock={revealBlock}
           />
