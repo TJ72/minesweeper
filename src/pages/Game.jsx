@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Board from "../components/Board";
+import Timer from "../components/Timer";
 import HomeBtn from "../components/HomeBtn";
 
 const Header = styled.div`
@@ -60,7 +61,7 @@ function Game() {
           </Info>
           <Info>
             <Icon src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png" />
-            {"000"}
+            <Timer />
           </Info>
         </InfoContainer>
       </Header>

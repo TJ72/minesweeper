@@ -21,14 +21,20 @@ function Board({ rows, cols, bombs }) {
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
-    function freshBoard() {
-      const newBoard = createBoard(rows, cols, bombs);
-      setGrid(newBoard.board);
-      setNonMineCount(rows * cols - bombs);
-      setMineLocations(newBoard.mineLocations);
-    }
     freshBoard();
   }, []);
+
+  function freshBoard() {
+    const newBoard = createBoard(rows, cols, bombs);
+    setGrid(newBoard.board);
+    setNonMineCount(rows * cols - bombs);
+    setMineLocations(newBoard.mineLocations);
+  }
+
+  function restartGame() {
+    freshBoard();
+    setGameOver(false);
+  }
 
   function updateFlag(e, r, c) {
     e.preventDefault();
@@ -41,7 +47,6 @@ function Board({ rows, cols, bombs }) {
     if (grid[r][c].revealed || gameOver) return;
     const newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[r][c].value === "X") {
-      alert("Game Over");
       for (let i = 0; i < mineLocations.length; i++) {
         newGrid[mineLocations[i][0]][mineLocations[i][1]].revealed = true;
       }
@@ -59,7 +64,7 @@ function Board({ rows, cols, bombs }) {
   if (grid.length === 0) return <LoadReminder>Loading...</LoadReminder>;
   return (
     <>
-      {gameOver && <Modal />}
+      {gameOver && <Modal restartGame={restartGame} />}
       {grid.map((row, idx1) => {
         return (
           <Row key={idx1}>

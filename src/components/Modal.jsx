@@ -18,7 +18,7 @@ const GameOverImg = styled.div`
   height: 300px;
   opacity: 100;
   z-index: 4;
-  margin-bottom: 60px;
+  margin-bottom: 45px;
   background: url("https://www.google.com/logos/fnbx/minesweeper/lose_screen.png");
   background-repeat: repeat-x;
   background-size: cover;
@@ -26,8 +26,8 @@ const GameOverImg = styled.div`
 `;
 
 const TryAgain = styled.div`
-  width: 250px;
-  height: 60px;
+  width: 230px;
+  height: 55px;
   margin: 0 50px;
   display: flex;
   align-items: center;
@@ -41,12 +41,12 @@ const TryAgain = styled.div`
   border-radius: 7px;
   cursor: pointer;
   img {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 `;
 
-function Modal() {
+function Modal({ restartGame }) {
   const [render, setRender] = useState(false);
   useEffect(() => {
     setTimeout(() => {
@@ -56,7 +56,7 @@ function Modal() {
   return (
     <Wrapper render={render}>
       <GameOverImg />
-      <TryAgain>
+      <TryAgain onClick={restartGame}>
         <img src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png" />
         Try Again
       </TryAgain>
