@@ -58,7 +58,6 @@ function Board({ rows, cols, bombs }) {
       setNonMineCount(newRevealedBoard.newNonMineCount);
       if (newRevealedBoard.newNonMineCount === 0) {
         setGameOver(true);
-        // console.log("Congrats!");
       }
     }
   }

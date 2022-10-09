@@ -61,7 +61,7 @@ function Modal({ restartGame, nonMineCount }) {
       <BannerImg nonMineCount={nonMineCount} />
       <TryAgain onClick={restartGame}>
         <img src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png" />
-        {nonMineCount === 0 ? "Congrats! Play Again" : "Try Again"}
+        {nonMineCount === 0 ? "Play Again" : "Try Again"}
       </TryAgain>
     </Wrapper>
   );
