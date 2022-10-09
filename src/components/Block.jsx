@@ -1,21 +1,18 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import {
-  mineColor,
-  unrevealedBlock,
-  revealedBlock,
-} from "../utils/blockBackground";
-import reveal from "../utils/reveal";
+import { unrevealedBlock, revealedBlock } from "../utils/blockBackground";
+import { numColorCode } from "../utils/numColorCode";
 
 const Border = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color: ${(props) => numColorCode(props.value)};
   background: ${(props) =>
     props.revealed
       ? props.value === "X"
-        ? mineColor()
+        ? "#e89648"
         : revealedBlock(props.indexSum)
       : unrevealedBlock(props.indexSum)};
   ${(props) => {
@@ -25,14 +22,14 @@ const Border = styled.div`
           width: 40px;
           height: 40px;
           font-size: 1.5rem;
-          font-weight: 600;
+          font-weight: 700;
         `;
       default:
         return css`
           width: 30px;
           height: 30px;
           font-size: 1.4rem;
-          font-weight: 570;
+          font-weight: 700;
         `;
     }
   }}
@@ -62,7 +59,13 @@ function Block({
         revealBlock(r, c);
       }}
     >
-      {revealed ? value : ""}
+      {flagged && !revealed
+        ? "🚩"
+        : revealed && value !== 0
+        ? value === "X"
+          ? "💣"
+          : value
+        : ""}
     </Border>
   );
 }
