@@ -3,6 +3,7 @@ import styled from "styled-components";
 import createBoard from "../utils/createBoard";
 import reveal from "../utils/reveal";
 import Block from "./Block";
+import Modal from "./Modal";
 
 const LoadReminder = styled.div`
   font-size: 2rem;
@@ -17,6 +18,7 @@ function Board({ rows, cols, bombs }) {
   const [grid, setGrid] = useState([]);
   const [nonMineCount, setNonMineCount] = useState(0);
   const [mineLocations, setMineLocations] = useState([]);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     function freshBoard() {
@@ -36,7 +38,7 @@ function Board({ rows, cols, bombs }) {
   }
 
   function revealBlock(r, c) {
-    if (grid[r][c].revealed) return;
+    if (grid[r][c].revealed || gameOver) return;
     const newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[r][c].value === "X") {
       alert("Game Over");
@@ -44,33 +46,41 @@ function Board({ rows, cols, bombs }) {
         newGrid[mineLocations[i][0]][mineLocations[i][1]].revealed = true;
       }
       setGrid(newGrid);
+      setGameOver(true);
     } else {
       const newRevealedBoard = reveal(newGrid, r, c, nonMineCount);
       setGrid(newRevealedBoard.grid);
       setNonMineCount(newRevealedBoard.newNonMineCount);
+      if (nonMineCount === 0) {
+        setGameOver(true);
+      }
     }
   }
-
   if (grid.length === 0) return <LoadReminder>Loading...</LoadReminder>;
-  return grid.map((row, idx1) => {
-    return (
-      <Row key={idx1}>
-        {row.map((block, idx2) => (
-          <Block
-            key={`${idx1}_${idx2}`}
-            value={block.value}
-            revealed={block.revealed}
-            flagged={block.flagged}
-            r={block.r}
-            c={block.c}
-            rows={rows}
-            updateFlag={updateFlag}
-            revealBlock={revealBlock}
-          />
-        ))}
-      </Row>
-    );
-  });
+  return (
+    <>
+      {gameOver && <Modal />}
+      {grid.map((row, idx1) => {
+        return (
+          <Row key={idx1}>
+            {row.map((block, idx2) => (
+              <Block
+                key={`${idx1}_${idx2}`}
+                value={block.value}
+                revealed={block.revealed}
+                flagged={block.flagged}
+                r={block.r}
+                c={block.c}
+                rows={rows}
+                updateFlag={updateFlag}
+                revealBlock={revealBlock}
+              />
+            ))}
+          </Row>
+        );
+      })}
+    </>
+  );
 }
 
 export default Board;

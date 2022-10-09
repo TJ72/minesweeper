@@ -1,0 +1,67 @@
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  opacity: ${(props) => (props.render ? 1 : 0)};
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const GameOverImg = styled.div`
+  width: 550px;
+  height: 300px;
+  opacity: 100;
+  z-index: 4;
+  margin-bottom: 60px;
+  background: url("https://www.google.com/logos/fnbx/minesweeper/lose_screen.png");
+  background-repeat: repeat-x;
+  background-size: cover;
+  position: relative;
+`;
+
+const TryAgain = styled.div`
+  width: 250px;
+  height: 60px;
+  margin: 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #1c992d;
+  color: #b6fabf;
+  padding: 10px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 7px;
+  cursor: pointer;
+  img {
+    width: 40px;
+    height: 40px;
+  }
+`;
+
+function Modal() {
+  const [render, setRender] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setRender(true);
+    }, 1000);
+  }, []);
+  return (
+    <Wrapper render={render}>
+      <GameOverImg />
+      <TryAgain>
+        <img src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png" />
+        Try Again
+      </TryAgain>
+    </Wrapper>
+  );
+}
+
+export default Modal;
