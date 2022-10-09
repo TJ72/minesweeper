@@ -48,6 +48,11 @@ function Block({
   updateFlag,
   revealBlock,
 }) {
+  function onClickUpdate(r, c) {
+    if (flagged) return;
+    revealBlock(r, c);
+  }
+
   return (
     <Border
       rows={rows}
@@ -56,7 +61,7 @@ function Block({
       value={value}
       onContextMenu={(e) => updateFlag(e, r, c)}
       onClick={() => {
-        revealBlock(r, c);
+        onClickUpdate(r, c);
       }}
     >
       {flagged && !revealed

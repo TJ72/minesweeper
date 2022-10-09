@@ -39,7 +39,7 @@ function Board({ rows, cols, bombs }) {
   function updateFlag(e, r, c) {
     e.preventDefault();
     const newGrid = JSON.parse(JSON.stringify(grid));
-    newGrid[r][c].flagged = true;
+    newGrid[r][c].flagged = !newGrid[r][c].flagged;
     setGrid(newGrid);
   }
 
@@ -56,15 +56,19 @@ function Board({ rows, cols, bombs }) {
       const newRevealedBoard = reveal(newGrid, r, c, nonMineCount);
       setGrid(newRevealedBoard.grid);
       setNonMineCount(newRevealedBoard.newNonMineCount);
-      if (nonMineCount === 0) {
+      if (newRevealedBoard.newNonMineCount === 0) {
         setGameOver(true);
+        // console.log("Congrats!");
       }
     }
   }
+
   if (grid.length === 0) return <LoadReminder>Loading...</LoadReminder>;
   return (
     <>
-      {gameOver && <Modal restartGame={restartGame} />}
+      {gameOver && (
+        <Modal restartGame={restartGame} nonMineCount={nonMineCount} />
+      )}
       {grid.map((row, idx1) => {
         return (
           <Row key={idx1}>

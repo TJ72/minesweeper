@@ -13,13 +13,16 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-const GameOverImg = styled.div`
+const BannerImg = styled.div`
   width: 550px;
   height: 300px;
   opacity: 100;
   z-index: 4;
   margin-bottom: 45px;
-  background: url("https://www.google.com/logos/fnbx/minesweeper/lose_screen.png");
+  background: ${(props) =>
+    props.nonMineCount === 0
+      ? `url("https://www.google.com/logos/fnbx/minesweeper/win_screen.png")`
+      : `url("https://www.google.com/logos/fnbx/minesweeper/lose_screen.png")`};
   background-repeat: repeat-x;
   background-size: cover;
   position: relative;
@@ -46,7 +49,7 @@ const TryAgain = styled.div`
   }
 `;
 
-function Modal({ restartGame }) {
+function Modal({ restartGame, nonMineCount }) {
   const [render, setRender] = useState(false);
   useEffect(() => {
     setTimeout(() => {
@@ -55,10 +58,10 @@ function Modal({ restartGame }) {
   }, []);
   return (
     <Wrapper render={render}>
-      <GameOverImg />
+      <BannerImg nonMineCount={nonMineCount} />
       <TryAgain onClick={restartGame}>
         <img src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png" />
-        Try Again
+        {nonMineCount === 0 ? "Congrats! Play Again" : "Try Again"}
       </TryAgain>
     </Wrapper>
   );
