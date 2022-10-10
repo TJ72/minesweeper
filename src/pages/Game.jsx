@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Board from "../components/Board";
@@ -34,19 +34,25 @@ const Icon = styled.img`
 
 function Game() {
   const { difficulty } = useParams();
+  const [info, setInfo] = useState();
+  const [flags, setFlags] = useState(0);
   let rows, cols, bombs;
 
-  switch (difficulty) {
-    case "easy":
-      [rows, cols, bombs] = [8, 8, 10];
-      break;
-    case "medium":
-      [rows, cols, bombs] = [16, 16, 40];
-      break;
-    case "hard":
-      [rows, cols, bombs] = [16, 30, 99];
-      break;
-  }
+  useEffect(() => {
+    switch (difficulty) {
+      case "easy":
+        [rows, cols, bombs] = [8, 8, 10];
+        break;
+      case "medium":
+        [rows, cols, bombs] = [16, 16, 40];
+        break;
+      case "hard":
+        [rows, cols, bombs] = [16, 30, 99];
+        break;
+    }
+    setInfo({ rows, cols, bombs });
+    setFlags(bombs);
+  }, []);
 
   return (
     <>
@@ -57,7 +63,7 @@ function Game() {
         <InfoContainer>
           <Info>
             <Icon src="https://www.google.com/logos/fnbx/minesweeper/flag_icon.png" />
-            {15}
+            {flags}
           </Info>
           <Info>
             <Icon src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png" />
@@ -65,7 +71,14 @@ function Game() {
           </Info>
         </InfoContainer>
       </Header>
-      <Board rows={rows} cols={cols} bombs={bombs} />
+      {info && (
+        <Board
+          rows={info.rows}
+          cols={info.cols}
+          bombs={info.bombs}
+          setFlags={setFlags}
+        />
+      )}
     </>
   );
 }

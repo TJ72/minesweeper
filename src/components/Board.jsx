@@ -14,7 +14,7 @@ const Row = styled.div`
   display: flex;
 `;
 
-function Board({ rows, cols, bombs }) {
+function Board({ rows, cols, bombs, setFlags }) {
   const [grid, setGrid] = useState([]);
   const [nonMineCount, setNonMineCount] = useState(0);
   const [mineLocations, setMineLocations] = useState([]);
@@ -29,6 +29,7 @@ function Board({ rows, cols, bombs }) {
     setGrid(newBoard.board);
     setNonMineCount(rows * cols - bombs);
     setMineLocations(newBoard.mineLocations);
+    setFlags(bombs);
   }
 
   function restartGame() {
@@ -41,6 +42,7 @@ function Board({ rows, cols, bombs }) {
     const newGrid = JSON.parse(JSON.stringify(grid));
     newGrid[r][c].flagged = !newGrid[r][c].flagged;
     setGrid(newGrid);
+    setFlags((prev) => prev - 1);
   }
 
   function revealBlock(r, c) {
