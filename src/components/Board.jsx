@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import createBoard from "../utils/createBoard";
+import createBlankBoard from "../utils/createBlankBoard";
+import placeBombs from "../utils/placeBombs";
+import computeBlocks from "../utils/computeBlocks";
 import reveal from "../utils/reveal";
 import Block from "./Block";
 import Modal from "./Modal";
@@ -19,9 +22,11 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
   const [nonMineCount, setNonMineCount] = useState(0);
   const [mineLocations, setMineLocations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  console.log("start", start);
+  console.log("grid", grid);
   useEffect(() => {
-    freshBoard();
+    // freshBoard();
+    const blankBoard = createBlankBoard(rows, cols);
+    setGrid(blankBoard);
   }, []);
 
   function freshBoard() {
@@ -40,13 +45,29 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
   function updateFlag(e, r, c) {
     e.preventDefault();
     const newGrid = JSON.parse(JSON.stringify(grid));
-    newGrid[r][c].flagged = !newGrid[r][c].flagged;
+    if (newGrid[r][c].flagged) {
+      newGrid[r][c].flagged = false;
+      setFlags((prev) => prev + 1);
+    } else {
+      newGrid[r][c].flagged = true;
+      setFlags((prev) => prev - 1);
+    }
     setGrid(newGrid);
-    setFlags((prev) => prev - 1);
   }
 
   function revealBlock(r, c) {
     if (grid[r][c].revealed || gameOver) return;
+    if (!start) {
+      console.log(r, c);
+      const { bombsBoard, mineLocations } = placeBombs(grid, bombs, [r, c]);
+      const board = computeBlocks(bombsBoard);
+      const newRevealedBoard = reveal(board, r, c, nonMineCount);
+      setGrid(newRevealedBoard.grid);
+      setNonMineCount(newRevealedBoard.newNonMineCount);
+      setMineLocations(mineLocations);
+      setStart(true);
+      return;
+    }
     const newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[r][c].value === "X") {
       for (let i = 0; i < mineLocations.length; i++) {
@@ -84,6 +105,8 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
                 rows={rows}
                 updateFlag={updateFlag}
                 revealBlock={revealBlock}
+                start={start}
+                setStart={setStart}
               />
             ))}
           </Row>
