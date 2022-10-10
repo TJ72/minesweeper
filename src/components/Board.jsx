@@ -14,12 +14,12 @@ const Row = styled.div`
   display: flex;
 `;
 
-function Board({ rows, cols, bombs, setFlags }) {
+function Board({ rows, cols, bombs, start, setStart, setFlags }) {
   const [grid, setGrid] = useState([]);
   const [nonMineCount, setNonMineCount] = useState(0);
   const [mineLocations, setMineLocations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-
+  console.log("start", start);
   useEffect(() => {
     freshBoard();
   }, []);

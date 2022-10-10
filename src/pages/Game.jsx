@@ -25,16 +25,16 @@ const Info = styled.div`
   align-items: center;
   font-size: 1.4rem;
   font-weight: 600;
-`;
-
-const Icon = styled.img`
-  width: 40px;
-  height: 40px;
+  img {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 function Game() {
   const { difficulty } = useParams();
   const [info, setInfo] = useState();
+  const [start, setStart] = useState(false);
   const [flags, setFlags] = useState(0);
   let rows, cols, bombs;
 
@@ -62,11 +62,17 @@ function Game() {
         </Link>
         <InfoContainer>
           <Info>
-            <Icon src="https://www.google.com/logos/fnbx/minesweeper/flag_icon.png" />
+            <img
+              src="https://www.google.com/logos/fnbx/minesweeper/flag_icon.png"
+              alt="flags"
+            />
             {flags}
           </Info>
           <Info>
-            <Icon src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png" />
+            <img
+              src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png"
+              alt="timer"
+            />
             <Timer />
           </Info>
         </InfoContainer>
@@ -76,6 +82,8 @@ function Game() {
           rows={info.rows}
           cols={info.cols}
           bombs={info.bombs}
+          start={start}
+          setStart={setStart}
           setFlags={setFlags}
         />
       )}
