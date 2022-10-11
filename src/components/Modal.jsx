@@ -54,7 +54,7 @@ function Modal({ setRestart, nonMineCount }) {
   useEffect(() => {
     setTimeout(() => {
       setRender(true);
-    }, 3000);
+    }, 2000);
   }, []);
   return (
     <Wrapper render={render}>
@@ -64,7 +64,10 @@ function Modal({ setRestart, nonMineCount }) {
           setRestart(true);
         }}
       >
-        <img src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png" />
+        <img
+          src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png"
+          alt="restart"
+        />
         {nonMineCount === 0 ? "Play Again" : "Try Again"}
       </TryAgain>
     </Wrapper>

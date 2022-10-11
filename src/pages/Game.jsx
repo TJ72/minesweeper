@@ -49,6 +49,8 @@ function Game() {
       case "hard":
         [rows, cols, bombs] = [16, 30, 99];
         break;
+      default:
+        [rows, cols, bombs] = [8, 8, 10];
     }
     setInfo({ rows, cols, bombs });
     setFlags(bombs);
