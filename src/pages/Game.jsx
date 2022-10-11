@@ -37,9 +37,9 @@ function Game() {
   const [start, setStart] = useState(false);
   const [flags, setFlags] = useState(0);
   const [time, setTime] = useState(0);
-  let rows, cols, bombs;
-  // modified useEffect function into useState
+
   useEffect(() => {
+    let rows, cols, bombs;
     switch (difficulty) {
       case "easy":
         [rows, cols, bombs] = [8, 8, 10];
