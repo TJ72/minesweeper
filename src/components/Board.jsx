@@ -72,6 +72,7 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
       setNonMineCount(newRevealedBoard.newNonMineCount);
       if (newRevealedBoard.newNonMineCount === 0) {
         setGameOver(true);
+        setStart(false);
       }
     }
   }
