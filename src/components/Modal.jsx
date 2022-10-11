@@ -49,17 +49,21 @@ const TryAgain = styled.div`
   }
 `;
 
-function Modal({ restartGame, nonMineCount }) {
+function Modal({ setRestart, nonMineCount }) {
   const [render, setRender] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setRender(true);
-    }, 1000);
+    }, 3000);
   }, []);
   return (
     <Wrapper render={render}>
       <BannerImg nonMineCount={nonMineCount} />
-      <TryAgain onClick={restartGame}>
+      <TryAgain
+        onClick={() => {
+          setRestart(true);
+        }}
+      >
         <img src="https://www.gstatic.com/images/icons/material/system/2x/refresh_white_24dp.png" />
         {nonMineCount === 0 ? "Play Again" : "Try Again"}
       </TryAgain>

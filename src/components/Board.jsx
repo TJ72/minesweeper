@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import createBoard from "../utils/createBoard";
 import createBlankBoard from "../utils/createBlankBoard";
 import placeBombs from "../utils/placeBombs";
 import computeBlocks from "../utils/computeBlocks";
@@ -22,28 +21,20 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
   const [nonMineCount, setNonMineCount] = useState(0);
   const [mineLocations, setMineLocations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  console.log("grid", grid);
+  const [restart, setRestart] = useState(false);
+
   useEffect(() => {
-    // freshBoard();
     const blankBoard = createBlankBoard(rows, cols);
     setGrid(blankBoard);
-  }, []);
-
-  function freshBoard() {
-    const newBoard = createBoard(rows, cols, bombs);
-    setGrid(newBoard.board);
     setNonMineCount(rows * cols - bombs);
-    setMineLocations(newBoard.mineLocations);
-    setFlags(bombs);
-  }
-
-  function restartGame() {
-    freshBoard();
+    setRestart(false);
     setGameOver(false);
-  }
+    setFlags(bombs);
+  }, [restart, setRestart]);
 
   function updateFlag(e, r, c) {
     e.preventDefault();
+    if (grid[r][c].revealed) return;
     const newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[r][c].flagged) {
       newGrid[r][c].flagged = false;
@@ -58,7 +49,6 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
   function revealBlock(r, c) {
     if (grid[r][c].revealed || gameOver) return;
     if (!start) {
-      console.log(r, c);
       const { bombsBoard, mineLocations } = placeBombs(grid, bombs, [r, c]);
       const board = computeBlocks(bombsBoard);
       const newRevealedBoard = reveal(board, r, c, nonMineCount);
@@ -75,6 +65,7 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
       }
       setGrid(newGrid);
       setGameOver(true);
+      setStart(false);
     } else {
       const newRevealedBoard = reveal(newGrid, r, c, nonMineCount);
       setGrid(newRevealedBoard.grid);
@@ -89,7 +80,7 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
   return (
     <>
       {gameOver && (
-        <Modal restartGame={restartGame} nonMineCount={nonMineCount} />
+        <Modal setRestart={setRestart} nonMineCount={nonMineCount} />
       )}
       {grid.map((row, idx1) => {
         return (
@@ -105,8 +96,6 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
                 rows={rows}
                 updateFlag={updateFlag}
                 revealBlock={revealBlock}
-                start={start}
-                setStart={setStart}
               />
             ))}
           </Row>
