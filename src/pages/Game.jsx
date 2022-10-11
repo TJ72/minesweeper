@@ -36,6 +36,7 @@ function Game() {
   const [info, setInfo] = useState();
   const [start, setStart] = useState(false);
   const [flags, setFlags] = useState(0);
+  const [time, setTime] = useState(0);
   let rows, cols, bombs;
   // modified useEffect function into useState
   useEffect(() => {
@@ -56,6 +57,10 @@ function Game() {
     setFlags(bombs);
   }, []);
 
+  useEffect(() => {
+    if (start) setTime(0);
+  }, [start]);
+
   return (
     <>
       <Header>
@@ -75,7 +80,12 @@ function Game() {
               src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png"
               alt="timer"
             />
-            <Timer />
+            <Timer
+              time={time}
+              setTime={setTime}
+              setStart={setStart}
+              start={start}
+            />
           </Info>
         </InfoContainer>
       </Header>
@@ -87,6 +97,7 @@ function Game() {
           start={start}
           setStart={setStart}
           setFlags={setFlags}
+          setTime={setTime}
         />
       )}
     </>

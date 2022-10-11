@@ -5,16 +5,16 @@ const Wrapper = styled.div`
   width: 40px;
 `;
 
-function Timer() {
-  const [time, setTime] = useState(0);
+function Timer({ time, setTime, start, setStart }) {
   useEffect(() => {
+    if (!start) return;
     const timerId = setTimeout(() => {
       setTime((prev) => prev + 1);
     }, 1000);
     return () => {
       clearTimeout(timerId);
     };
-  }, [time]);
+  }, [time, start, setStart]);
   return <Wrapper>{String(time).padStart(3, "0")}</Wrapper>;
 }
 

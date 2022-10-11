@@ -16,7 +16,7 @@ const Row = styled.div`
   display: flex;
 `;
 
-function Board({ rows, cols, bombs, start, setStart, setFlags }) {
+function Board({ rows, cols, bombs, start, setStart, setFlags, setTime }) {
   const [grid, setGrid] = useState([]);
   const [nonMineCount, setNonMineCount] = useState(0);
   const [mineLocations, setMineLocations] = useState([]);
@@ -30,6 +30,7 @@ function Board({ rows, cols, bombs, start, setStart, setFlags }) {
     setRestart(false);
     setGameOver(false);
     setFlags(bombs);
+    setTime(0);
   }, [restart, setRestart]);
 
   function updateFlag(e, r, c) {
