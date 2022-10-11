@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Board from "../components/Board";
+import Timer from "../components/Timer";
 import HomeBtn from "../components/HomeBtn";
 
 const Header = styled.div`
@@ -24,28 +25,41 @@ const Info = styled.div`
   align-items: center;
   font-size: 1.4rem;
   font-weight: 600;
-`;
-
-const Icon = styled.img`
-  width: 40px;
-  height: 40px;
+  img {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 function Game() {
   const { difficulty } = useParams();
+  const [info, setInfo] = useState();
+  const [start, setStart] = useState(false);
+  const [flags, setFlags] = useState(0);
+  const [time, setTime] = useState(0);
   let rows, cols, bombs;
+  // modified useEffect function into useState
+  useEffect(() => {
+    switch (difficulty) {
+      case "easy":
+        [rows, cols, bombs] = [8, 8, 10];
+        break;
+      case "medium":
+        [rows, cols, bombs] = [16, 16, 40];
+        break;
+      case "hard":
+        [rows, cols, bombs] = [16, 30, 99];
+        break;
+      default:
+        [rows, cols, bombs] = [8, 8, 10];
+    }
+    setInfo({ rows, cols, bombs });
+    setFlags(bombs);
+  }, []);
 
-  switch (difficulty) {
-    case "easy":
-      [rows, cols, bombs] = [8, 8, 10];
-      break;
-    case "medium":
-      [rows, cols, bombs] = [16, 16, 40];
-      break;
-    case "hard":
-      [rows, cols, bombs] = [16, 30, 99];
-      break;
-  }
+  useEffect(() => {
+    if (start) setTime(0);
+  }, [start]);
 
   return (
     <>
@@ -55,16 +69,37 @@ function Game() {
         </Link>
         <InfoContainer>
           <Info>
-            <Icon src="https://www.google.com/logos/fnbx/minesweeper/flag_icon.png" />
-            {15}
+            <img
+              src="https://www.google.com/logos/fnbx/minesweeper/flag_icon.png"
+              alt="flags"
+            />
+            {flags}
           </Info>
           <Info>
-            <Icon src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png" />
-            {"000"}
+            <img
+              src="https://www.google.com/logos/fnbx/minesweeper/clock_icon.png"
+              alt="timer"
+            />
+            <Timer
+              time={time}
+              setTime={setTime}
+              setStart={setStart}
+              start={start}
+            />
           </Info>
         </InfoContainer>
       </Header>
-      <Board rows={rows} cols={cols} bombs={bombs} />
+      {info && (
+        <Board
+          rows={info.rows}
+          cols={info.cols}
+          bombs={info.bombs}
+          start={start}
+          setStart={setStart}
+          setFlags={setFlags}
+          setTime={setTime}
+        />
+      )}
     </>
   );
 }

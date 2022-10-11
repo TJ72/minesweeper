@@ -1,10 +1,24 @@
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 const Title = styled.div`
   margin-bottom: 80px;
   font-size: 3.4rem;
   font-weight: 700;
+`;
+
+const float = keyframes`
+  50% { transform: translateY(-10px) }
+`;
+
+const floatMixin = css`
+  animation: ${float} 3s;
+  animation-iteration-count: infinite;
+`;
+
+const Icon = styled.span`
+  display: inline-block;
+  ${floatMixin};
 `;
 
 const ButtonsContainer = styled.div`
@@ -52,7 +66,9 @@ const HardBtn = styled(Button)`
 function Home() {
   return (
     <>
-      <Title>Welcome to Minesweeper!💣</Title>
+      <Title>
+        Welcome to Minesweeper!<Icon>💣</Icon>
+      </Title>
       <ButtonsContainer>
         <Link to="/easy">
           <EasyBtn>Easy</EasyBtn>

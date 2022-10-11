@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { unrevealedBlock, revealedBlock } from "../utils/blockBackground";
+import { renderBlocksBackground } from "../utils/blockBackground";
 import { numColorCode } from "../utils/numColorCode";
 
 const Border = styled.div`
@@ -10,11 +10,7 @@ const Border = styled.div`
   cursor: pointer;
   color: ${(props) => numColorCode(props.value)};
   background: ${(props) =>
-    props.revealed
-      ? props.value === "X"
-        ? "#e89648"
-        : revealedBlock(props.indexSum)
-      : unrevealedBlock(props.indexSum)};
+    renderBlocksBackground(props.value, props.revealed, props.indexSum)};
   ${(props) => {
     switch (props.rows) {
       case 8:
@@ -48,6 +44,23 @@ function Block({
   updateFlag,
   revealBlock,
 }) {
+  function onClickUpdate(r, c) {
+    if (flagged) return;
+    revealBlock(r, c);
+  }
+
+  function renderRevealedBlocks(value, flagged, revealed) {
+    if (flagged && !revealed) {
+      return "🚩";
+    } else if (revealed && value === "X") {
+      return "💣";
+    } else if (revealed && value !== 0) {
+      return value;
+    } else if (revealed && value === 0) {
+      return "";
+    }
+  }
+
   return (
     <Border
       rows={rows}
@@ -56,16 +69,10 @@ function Block({
       value={value}
       onContextMenu={(e) => updateFlag(e, r, c)}
       onClick={() => {
-        revealBlock(r, c);
+        onClickUpdate(r, c);
       }}
     >
-      {flagged && !revealed
-        ? "🚩"
-        : revealed && value !== 0
-        ? value === "X"
-          ? "💣"
-          : value
-        : ""}
+      {renderRevealedBlocks(value, flagged, revealed)}
     </Border>
   );
 }
